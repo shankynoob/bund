@@ -2,117 +2,231 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Street Fighter V6</title>
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+
+<title>Street Fighter V6.1</title>
 
 <style>
-*{box-sizing:border-box}
 
-body{
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
     margin:0;
+    padding:0;
+    width:100%;
+    min-height:100%;
     background:#050507;
     color:white;
     font-family:Arial,sans-serif;
-    text-align:center;
     overflow-x:hidden;
 }
 
-h1{margin:10px 0}
+body{
+    text-align:center;
+}
+
+h1{
+    margin:10px 0;
+    font-size:clamp(22px,5vw,34px);
+}
+
+
+/* =========================
+   GAME
+========================= */
 
 #game{
     position:relative;
-    width:900px;
-    max-width:96vw;
-    height:550px;
-    margin:auto;
+
+    width:min(900px,96vw);
+    height:min(550px,70vh);
+
+    min-height:400px;
+
+    margin:10px auto;
+
     overflow:hidden;
-    border:3px solid white;
-    border-radius:15px;
-    box-shadow:0 0 40px #000;
+
+    border:2px solid white;
+    border-radius:14px;
+
+    background:#111;
+
+    touch-action:none;
 }
 
 canvas{
+    position:absolute;
+    inset:0;
+
     width:100%;
     height:100%;
+
     display:block;
+
+    touch-action:none;
 }
+
+
+/* =========================
+   SCREENS
+========================= */
 
 .screen{
     position:absolute;
+
     inset:0;
+
     z-index:20;
-    background:rgba(0,0,0,.94);
+
+    background:rgba(0,0,0,.95);
+
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
-    justify-content:center;
-    overflow:auto;
+
+    justify-content:flex-start;
+
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    padding:
+        20px
+        12px
+        100px;
+
+    -webkit-overflow-scrolling:touch;
+
+    touch-action:pan-y;
 }
 
-.hidden{display:none!important}
+.hidden{
+    display:none!important;
+}
+
+
+/* =========================
+   CHARACTER CARDS
+========================= */
 
 .cards{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
+    width:100%;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(135px,1fr));
+
     gap:10px;
-    max-width:800px;
+
+    max-width:750px;
 }
 
 .card{
-    width:165px;
-    padding:12px;
+    padding:12px 8px;
+
     background:#15151d;
+
     border:2px solid #444;
+
     border-radius:14px;
+
     cursor:pointer;
-    transition:.2s;
+
+    transition:.15s;
+
+    touch-action:manipulation;
 }
 
-.card:hover{
-    transform:translateY(-5px);
-    border-color:white;
+.card:active{
+    transform:scale(.96);
 }
 
 .card.selected{
     border-color:#ffd32a;
-    box-shadow:0 0 20px #ffd32a;
+
+    box-shadow:
+        0 0 18px
+        rgba(255,211,42,.5);
 }
 
 .avatar{
-    width:60px;
-    height:60px;
-    border-radius:50%;
+    width:55px;
+    height:55px;
+
     margin:auto;
+
+    border-radius:50%;
+
     border:3px solid white;
 }
 
-.kai{background:#3498db}
-.ryuji{background:#e74c3c}
-.akira{background:#9b59b6}
-.blaze{background:#f39c12}
-.void{background:#111;border-color:#9b59b6}
+.kai{
+    background:#3498db;
+}
+
+.ryuji{
+    background:#e74c3c;
+}
+
+.akira{
+    background:#9b59b6;
+}
+
+.blaze{
+    background:#f39c12;
+}
+
+.void{
+    background:#111;
+}
 
 .stats{
     color:#aaa;
-    font-size:12px;
+
+    font-size:11px;
+
     line-height:1.5;
 }
 
+
+/* =========================
+   BUTTONS
+========================= */
+
 button{
-    margin:6px;
-    padding:12px 24px;
+    margin:5px;
+
+    padding:12px 20px;
+
     border:0;
+
     border-radius:10px;
+
     background:#ff4757;
+
     color:white;
-    font-size:17px;
+
+    font-size:16px;
+
     font-weight:bold;
+
     cursor:pointer;
+
+    touch-action:manipulation;
 }
 
-button:hover{
-    transform:scale(1.04);
+button:active{
+    transform:scale(.94);
 }
 
 .menuBtn{
@@ -120,165 +234,469 @@ button:hover{
 }
 
 select{
-    padding:8px 20px;
+    padding:9px 25px;
+
     border-radius:8px;
+
+    font-size:16px;
+}
+
+
+/* =========================
+   ARENAS
+========================= */
+
+.arenaButtons{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    justify-content:center;
 }
 
 .arenaButtons button{
     background:#333;
-    padding:8px 13px;
+
+    padding:9px 12px;
+
     font-size:13px;
 }
 
 .arenaButtons button.selected{
     background:#ffd32a;
+
     color:#111;
 }
 
+
+/* =========================
+   CONTROLS
+========================= */
+
 #controls{
+    max-width:900px;
+
+    margin:8px auto;
+
+    padding:0 10px;
+
     color:#aaa;
+
     font-size:13px;
+
     line-height:1.7;
-    margin:8px;
 }
 
-.yellow{color:#ffd32a}
+.yellow{
+    color:#ffd32a;
+}
+
+
+/* =========================
+   TOUCH CONTROLLER
+========================= */
 
 #touch{
     display:none;
+
     position:absolute;
-    bottom:10px;
-    left:8px;
-    right:8px;
+
+    left:0;
+    right:0;
+    bottom:0;
+
     z-index:15;
+
+    padding:
+        8px
+        8px
+        max(8px,env(safe-area-inset-bottom));
+
     justify-content:space-between;
+
+    align-items:flex-end;
+
     pointer-events:none;
+
+    touch-action:none;
 }
 
 .touchGroup{
     display:flex;
-    gap:5px;
+
+    gap:6px;
+
+    flex-wrap:wrap;
+
+    max-width:48%;
+
+    pointer-events:none;
 }
 
 .touchBtn{
-    width:50px;
-    height:50px;
+    width:52px;
+    height:52px;
+
     padding:0;
+
     margin:0;
+
     border-radius:50%;
-    background:rgba(255,255,255,.2);
-    border:2px solid rgba(255,255,255,.5);
+
+    background:rgba(20,20,25,.75);
+
+    border:2px solid
+        rgba(255,255,255,.55);
+
+    font-size:17px;
+
     pointer-events:auto;
-    font-size:14px;
+
+    touch-action:none;
+
+    user-select:none;
 }
+
+.touchBtn:active{
+    background:rgba(255,71,87,.8);
+
+    transform:scale(.9);
+}
+
+
+/* =========================
+   TOAST
+========================= */
 
 #toast{
     position:absolute;
-    top:110px;
+
+    top:80px;
     left:50%;
+
     transform:translateX(-50%);
+
     z-index:30;
-    font-size:24px;
+
+    font-size:22px;
+
     font-weight:bold;
+
     pointer-events:none;
-    text-shadow:0 2px 5px #000;
+
+    text-shadow:
+        0 2px 5px #000;
+
+    white-space:nowrap;
 }
 
-@media(max-width:650px){
-    #touch{display:flex}
-    #controls{font-size:11px}
-    .card{width:140px}
+
+/* =========================
+   PHONE
+========================= */
+
+@media(max-width:700px){
+
+    body{
+        min-height:100dvh;
+    }
+
+    #game{
+        width:100vw;
+
+        max-width:none;
+
+        height:62vh;
+
+        min-height:380px;
+
+        margin:0;
+
+        border-left:0;
+        border-right:0;
+
+        border-radius:0;
+    }
+
+    #controls{
+        font-size:11px;
+
+        padding:4px 12px;
+    }
+
+    #touch{
+        display:flex;
+    }
+
+    .touchBtn{
+        width:46px;
+        height:46px;
+
+        font-size:14px;
+    }
+
+    .card{
+        min-height:150px;
+    }
+
+    .screen{
+        padding-bottom:120px;
+    }
+
+    button{
+        min-height:44px;
+    }
+
 }
+
+
+/* =========================
+   SMALL PHONES
+========================= */
+
+@media(max-width:400px){
+
+    #game{
+        height:60vh;
+
+        min-height:360px;
+    }
+
+    .touchBtn{
+        width:41px;
+        height:41px;
+
+        font-size:12px;
+    }
+
+    .touchGroup{
+        gap:4px;
+    }
+
+    .card{
+        min-height:140px;
+    }
+
+}
+
+
+/* =========================
+   LANDSCAPE PHONE
+========================= */
+
+@media(max-height:500px) and (orientation:landscape){
+
+    #game{
+        width:100vw;
+
+        height:100vh;
+
+        min-height:0;
+
+        margin:0;
+
+        border:0;
+
+        border-radius:0;
+    }
+
+    #controls{
+        display:none;
+    }
+
+    h1{
+        font-size:20px;
+    }
+
+    .screen{
+        padding:
+            10px
+            10px
+            80px;
+    }
+
+    .card{
+        min-height:120px;
+    }
+
+    .touchBtn{
+        width:44px;
+        height:44px;
+    }
+
+}
+
+
+/* =========================
+   SAFE AREA
+========================= */
+
+@supports(padding:max(0px)){
+
+    #touch{
+        padding-bottom:
+            max(
+                8px,
+                env(safe-area-inset-bottom)
+            );
+    }
+
+}
+
 </style>
 </head>
 
+
 <body>
 
-<h1>⚔️ STREET FIGHTER V6</h1>
+<h1>⚔️ STREET FIGHTER V6.1</h1>
 
 <div id="game">
 
-<canvas id="canvas" width="900" height="550"></canvas>
-
-<div id="toast"></div>
+<canvas
+id="canvas"
+width="900"
+height="550">
+</canvas>
 
 
 <!-- ================= MENU ================= -->
 
 <div id="menu" class="screen">
 
-<h1>🔥 STREET FIGHTER V6</h1>
+<h1>🔥 STREET FIGHTER</h1>
 
 <p>Choose your fighter</p>
 
 <div class="cards">
 
-<div class="card selected" data-fighter="kai">
+
+<div class="card selected"
+data-fighter="kai">
+
 <div class="avatar kai"></div>
+
 <h3>⚡ KAI</h3>
+
 <div class="stats">
 Speed ⭐⭐⭐⭐⭐<br>
 Power ⭐⭐⭐<br>
 Defense ⭐⭐⭐<br>
 Thunder Rush
 </div>
+
 </div>
 
-<div class="card" data-fighter="ryuji">
+
+<div class="card"
+data-fighter="ryuji">
+
 <div class="avatar ryuji"></div>
+
 <h3>🔥 RYUJI</h3>
+
 <div class="stats">
 Speed ⭐⭐<br>
 Power ⭐⭐⭐⭐⭐<br>
 Defense ⭐⭐⭐⭐<br>
 Dragon Smash
 </div>
+
 </div>
 
-<div class="card" data-fighter="akira">
+
+<div class="card"
+data-fighter="akira">
+
 <div class="avatar akira"></div>
+
 <h3>👿 AKIRA</h3>
+
 <div class="stats">
 Speed ⭐⭐⭐⭐<br>
 Power ⭐⭐⭐⭐<br>
 Defense ⭐⭐⭐⭐⭐<br>
 Shadow Burst
 </div>
+
 </div>
 
-<div class="card" data-fighter="blaze">
+
+<div class="card"
+data-fighter="blaze">
+
 <div class="avatar blaze"></div>
+
 <h3>☄️ BLAZE</h3>
+
 <div class="stats">
 Speed ⭐⭐⭐<br>
 Power ⭐⭐⭐⭐⭐<br>
 Defense ⭐⭐⭐<br>
 Meteor Strike
 </div>
+
 </div>
 
 </div>
+
 
 <h3>Difficulty</h3>
 
 <select id="difficulty">
-<option value="easy">Easy</option>
-<option value="normal" selected>Normal</option>
-<option value="hard">Hard</option>
+
+<option value="easy">
+Easy
+</option>
+
+<option value="normal" selected>
+Normal
+</option>
+
+<option value="hard">
+Hard
+</option>
+
 </select>
+
 
 <h3>🏟️ Arena</h3>
 
 <div class="arenaButtons">
-<button class="selected" data-arena="city">🌃 City</button>
-<button data-arena="dojo">🥋 Dojo</button>
-<button data-arena="volcano">🌋 Volcano</button>
+
+<button
+class="selected"
+data-arena="city">
+🌃 City
+</button>
+
+<button
+data-arena="dojo">
+🥋 Dojo
+</button>
+
+<button
+data-arena="volcano">
+🌋 Volcano
+</button>
+
 </div>
 
+
 <div>
-<button id="arcadeBtn">👑 ARCADE</button>
-<button id="trainingBtn" class="menuBtn">🎯 TRAINING</button>
+
+<button id="arcadeBtn">
+👑 ARCADE
+</button>
+
+<button
+id="trainingBtn"
+class="menuBtn">
+🎯 TRAINING
+</button>
+
 </div>
+
 
 <p id="saveInfo"></p>
 
@@ -287,33 +705,51 @@ Meteor Strike
 
 <!-- ================= ROUND ================= -->
 
-<div id="roundScreen" class="screen hidden">
+<div
+id="roundScreen"
+class="screen hidden">
 
-<h1 id="roundText">ROUND 1</h1>
+<h1 id="roundText">
+ROUND 1
+</h1>
 
-<h2 id="roundSub">READY?</h2>
+<h2 id="roundSub">
+READY?
+</h2>
 
 </div>
 
 
 <!-- ================= PAUSE ================= -->
 
-<div id="pauseScreen" class="screen hidden">
+<div
+id="pauseScreen"
+class="screen hidden">
 
 <h1>⏸️ PAUSED</h1>
 
-<button id="resumeBtn">▶ RESUME</button>
+<button id="resumeBtn">
+▶ RESUME
+</button>
 
-<button id="quitBtn" class="menuBtn">🏠 QUIT</button>
+<button
+id="quitBtn"
+class="menuBtn">
+🏠 QUIT
+</button>
 
 </div>
 
 
 <!-- ================= GAME OVER ================= -->
 
-<div id="gameOver" class="screen hidden">
+<div
+id="gameOver"
+class="screen hidden">
 
-<h1 id="resultText">🏆 VICTORY!</h1>
+<h1 id="resultText">
+🏆 VICTORY!
+</h1>
 
 <h2 id="scoreText"></h2>
 
@@ -321,49 +757,107 @@ Meteor Strike
 
 <p id="achievementText"></p>
 
-<button id="rematchBtn">🔄 REMATCH</button>
+<button id="rematchBtn">
+🔄 REMATCH
+</button>
 
-<button id="backMenuBtn" class="menuBtn">🏠 MENU</button>
+<button
+id="backMenuBtn"
+class="menuBtn">
+🏠 MENU
+</button>
 
 </div>
 
 
-<!-- ================= TOUCH ================= -->
+<!-- ================= MOBILE CONTROLS ================= -->
 
 <div id="touch">
 
 <div class="touchGroup">
 
-<button class="touchBtn" data-key="a">◀</button>
-<button class="touchBtn" data-key="d">▶</button>
+<button
+class="touchBtn"
+data-key="a">
+◀
+</button>
+
+<button
+class="touchBtn"
+data-key="d">
+▶
+</button>
+
+<button
+class="touchBtn"
+data-action="jump">
+⬆
+</button>
 
 </div>
+
 
 <div class="touchGroup">
 
-<button class="touchBtn" data-action="jump">⬆</button>
-<button class="touchBtn" data-action="punch">👊</button>
-<button class="touchBtn" data-action="kick">🦵</button>
-<button class="touchBtn" data-action="special">⚡</button>
-<button class="touchBtn" data-action="ultimate">💥</button>
-<button class="touchBtn" data-action="block">🛡️</button>
+<button
+class="touchBtn"
+data-action="block">
+🛡️
+</button>
+
+<button
+class="touchBtn"
+data-action="punch">
+👊
+</button>
+
+<button
+class="touchBtn"
+data-action="kick">
+🦵
+</button>
+
+<button
+class="touchBtn"
+data-action="special">
+⚡
+</button>
+
+<button
+class="touchBtn"
+data-action="ultimate">
+💥
+</button>
 
 </div>
 
 </div>
 
 </div>
+
 
 <div id="controls">
+
 <b>A/D</b> Move |
+
 <b>W</b> Jump |
+
 <b>S</b> Dash |
+
 <b>J</b> Punch |
+
 <b>K</b> Kick |
+
 <b>L</b> Block |
-<span class="yellow"><b>SPACE</b> Special</span> |
+
+<span class="yellow">
+<b>SPACE</b> Special
+</span> |
+
 <b>Q</b> Ultimate |
+
 <b>ESC</b> Pause
+
 </div>
 
 
@@ -373,29 +867,52 @@ Meteor Strike
    CANVAS
 ===================================================== */
 
-const canvas=document.getElementById("canvas");
-const ctx=canvas.getContext("2d");
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
 
 
 /* =====================================================
    UI
 ===================================================== */
 
-const menu=document.getElementById("menu");
-const roundScreen=document.getElementById("roundScreen");
-const pauseScreen=document.getElementById("pauseScreen");
-const gameOver=document.getElementById("gameOver");
+const menu =
+document.getElementById("menu");
 
-const roundText=document.getElementById("roundText");
-const roundSub=document.getElementById("roundSub");
+const roundScreen =
+document.getElementById("roundScreen");
 
-const resultText=document.getElementById("resultText");
-const scoreText=document.getElementById("scoreText");
-const statsText=document.getElementById("statsText");
-const achievementText=document.getElementById("achievementText");
+const pauseScreen =
+document.getElementById("pauseScreen");
 
-const toast=document.getElementById("toast");
-const saveInfo=document.getElementById("saveInfo");
+const gameOver =
+document.getElementById("gameOver");
+
+const roundText =
+document.getElementById("roundText");
+
+const roundSub =
+document.getElementById("roundSub");
+
+const resultText =
+document.getElementById("resultText");
+
+const scoreText =
+document.getElementById("scoreText");
+
+const statsText =
+document.getElementById("statsText");
+
+const achievementText =
+document.getElementById("achievementText");
+
+const toast =
+document.getElementById("toast");
+
+const saveInfo =
+document.getElementById("saveInfo");
 
 
 /* =====================================================
@@ -423,6 +940,7 @@ let enemyWins=0;
 let arcadeStage=1;
 
 let timeLeft=60;
+
 let timerInterval;
 
 let aiTimer=0;
@@ -440,38 +958,70 @@ let roundLock=false;
 let totalHits=0;
 let maxCombo=0;
 
-let matchStartTime=0;
-
 
 /* =====================================================
-   SAVE DATA
+   SAVE
 ===================================================== */
 
 let save={
-wins:Number(localStorage.getItem("v6Wins")||0),
-xp:Number(localStorage.getItem("v6XP")||0),
-coins:Number(localStorage.getItem("v6Coins")||0),
-streak:Number(localStorage.getItem("v6Streak")||0)
+
+wins:Number(
+localStorage.getItem("v6Wins")||0
+),
+
+xp:Number(
+localStorage.getItem("v6XP")||0
+),
+
+coins:Number(
+localStorage.getItem("v6Coins")||0
+),
+
+streak:Number(
+localStorage.getItem("v6Streak")||0
+)
+
 };
+
 
 function saveData(){
 
-localStorage.setItem("v6Wins",save.wins);
-localStorage.setItem("v6XP",save.xp);
-localStorage.setItem("v6Coins",save.coins);
-localStorage.setItem("v6Streak",save.streak);
+localStorage.setItem(
+"v6Wins",
+save.wins
+);
+
+localStorage.setItem(
+"v6XP",
+save.xp
+);
+
+localStorage.setItem(
+"v6Coins",
+save.coins
+);
+
+localStorage.setItem(
+"v6Streak",
+save.streak
+);
 
 updateSaveInfo();
 
 }
 
+
 function updateSaveInfo(){
 
 saveInfo.innerHTML=
-"🏆 Wins: "+save.wins+
-"　⭐ XP: "+save.xp+
-"　🪙 Coins: "+save.coins+
-"　🔥 Streak: "+save.streak;
+"🏆 Wins: "+
+save.wins+
+"　⭐ XP: "+
+save.xp+
+"　🪙 Coins: "+
+save.coins+
+"　🔥 Streak: "+
+save.streak;
 
 }
 
@@ -553,6 +1103,7 @@ specialName:"DARK APOCALYPSE"
 
 let audioCtx=null;
 
+
 function sound(type){
 
 try{
@@ -560,14 +1111,22 @@ try{
 if(!audioCtx)
 audioCtx=new AudioContext();
 
-let osc=audioCtx.createOscillator();
-let gain=audioCtx.createGain();
+let osc=
+audioCtx.createOscillator();
+
+let gain=
+audioCtx.createGain();
 
 osc.connect(gain);
-gain.connect(audioCtx.destination);
+
+gain.connect(
+audioCtx.destination
+);
 
 let freq=300;
+
 let duration=.08;
+
 
 if(type==="hit"){
 freq=130;
@@ -599,15 +1158,6 @@ freq=60;
 duration=.7;
 }
 
-if(type==="select"){
-freq=500;
-duration=.08;
-}
-
-if(type==="dash"){
-freq=180;
-duration=.08;
-}
 
 osc.frequency.value=freq;
 
@@ -633,12 +1183,17 @@ audioCtx.currentTime+duration
 
 
 /* =====================================================
-   FIGHTER CLASS
+   FIGHTER
 ===================================================== */
 
 class Fighter{
 
-constructor(x,data,facing,isPlayer){
+constructor(
+x,
+data,
+facing,
+isPlayer
+){
 
 this.x=x;
 this.y=390;
@@ -649,16 +1204,21 @@ this.height=120;
 this.data=data;
 
 this.name=data.name;
+
 this.color=data.color;
 
 this.speed=data.speed;
+
 this.power=data.power;
+
 this.defense=data.defense;
 
 this.maxStamina=data.stamina;
+
 this.stamina=data.stamina;
 
 this.specialPower=data.special;
+
 this.ultimatePower=data.ultimate;
 
 this.health=100;
@@ -670,7 +1230,9 @@ this.isPlayer=isPlayer;
 this.velocityY=0;
 
 this.attackType="";
+
 this.attackTimer=0;
+
 this.attackCooldown=0;
 
 this.specialCooldown=0;
@@ -686,12 +1248,15 @@ this.blocking=false;
 this.hasHit=false;
 
 this.combo=0;
+
 this.comboTimer=0;
 
 this.meter=0;
+
 this.ultimateReady=false;
 
 this.anim=0;
+
 this.lastX=x;
 
 this.walking=false;
@@ -703,7 +1268,8 @@ this.hitsLanded=0;
 
 update(){
 
-if(!gameRunning)return;
+if(!gameRunning)
+return;
 
 
 this.anim+=.15;
@@ -712,11 +1278,14 @@ this.anim+=.15;
 /* gravity */
 
 this.velocityY+=.8;
+
 this.y+=this.velocityY;
+
 
 if(this.y>=390){
 
 this.y=390;
+
 this.velocityY=0;
 
 }
@@ -734,6 +1303,7 @@ this.attackTimer<=10 &&
 ){
 
 this.hasHit=true;
+
 this.checkHit();
 
 }
@@ -744,7 +1314,7 @@ if(this.attackTimer===0)
 this.attackType="";
 
 
-/* cooldowns */
+/* cooldown */
 
 if(this.attackCooldown>0)
 this.attackCooldown--;
@@ -765,7 +1335,8 @@ if(this.dashTimer>0){
 
 this.dashTimer--;
 
-this.x+=this.facing*15;
+this.x+=
+this.facing*15;
 
 }
 
@@ -792,7 +1363,8 @@ this.dashTimer===0
 
 this.stamina+=.45;
 
-this.stamina=Math.min(
+this.stamina=
+Math.min(
 this.maxStamina,
 this.stamina
 );
@@ -802,7 +1374,8 @@ this.stamina
 
 /* boundaries */
 
-this.x=Math.max(
+this.x=
+Math.max(
 10,
 Math.min(
 835,
@@ -811,38 +1384,38 @@ this.x
 );
 
 
-/* movement animation */
+/* animation */
 
 this.walking=
-Math.abs(this.x-this.lastX)>.1;
+Math.abs(
+this.x-this.lastX
+)>.1;
 
 this.lastX=this.x;
 
 }
 
 
-/* =====================================================
-   MOVE
-===================================================== */
+/* MOVE */
 
 move(direction){
 
 if(
-this.attackTimer>0||
-this.dashTimer>0||
+this.attackTimer>0 ||
+this.dashTimer>0 ||
 this.blocking
-)return;
+)
+return;
 
-this.x+=direction*this.speed;
+this.x+=
+direction*this.speed;
 
 this.facing=direction;
 
 }
 
 
-/* =====================================================
-   JUMP
-===================================================== */
+/* JUMP */
 
 jump(){
 
@@ -855,89 +1428,87 @@ this.velocityY=-15;
 
 this.stamina-=10;
 
-createText(
-this.x,
-this.y,
-"JUMP!"
-);
-
 }
 
 }
 
 
-/* =====================================================
-   DASH
-===================================================== */
+/* DASH */
 
 dash(){
 
 if(
-this.dashTimer>0||
-this.attackTimer>0||
+this.dashTimer>0 ||
+this.attackTimer>0 ||
 this.stamina<20
-)return;
+)
+return;
 
 this.stamina-=20;
 
 this.dashTimer=12;
+
 this.invincible=12;
 
 sound("dash");
 
-createText(
-this.x,
-this.y,
-"WHOOSH!"
-);
-
 }
 
 
-/* =====================================================
-   ATTACK
-===================================================== */
+/* ATTACK */
 
 attack(type){
 
 if(
-this.attackCooldown>0||
-this.attackTimer>0||
+this.attackCooldown>0 ||
+this.attackTimer>0 ||
 this.blocking
-)return;
+)
+return;
+
 
 let cost=5;
+
 let duration=18;
+
 
 if(type==="kick"){
 
 cost=6;
+
 duration=22;
 
 }
 
+
 if(type==="heavy"){
 
 cost=12;
+
 duration=28;
 
 }
 
+
 if(type==="air"){
 
 cost=7;
+
 duration=20;
 
 }
 
+
 if(this.stamina<cost)
 return;
+
 
 this.attackType=type;
 
 this.attackTimer=duration;
 
-this.attackCooldown=duration+4;
+this.attackCooldown=
+duration+4;
 
 this.stamina-=cost;
 
@@ -946,17 +1517,17 @@ this.hasHit=false;
 }
 
 
-/* =====================================================
-   SPECIAL
-===================================================== */
+/* SPECIAL */
 
 special(){
 
 if(
-this.specialCooldown>0||
-this.attackTimer>0||
+this.specialCooldown>0 ||
+this.attackTimer>0 ||
 this.stamina<40
-)return;
+)
+return;
+
 
 this.attackType="special";
 
@@ -980,16 +1551,16 @@ sound("special");
 }
 
 
-/* =====================================================
-   ULTIMATE
-===================================================== */
+/* ULTIMATE */
 
 ultimate(){
 
 if(
-!this.ultimateReady||
+!this.ultimateReady ||
 this.attackTimer>0
-)return;
+)
+return;
+
 
 this.attackType="ultimate";
 
@@ -1013,15 +1584,15 @@ sound("ultimate");
 shake=20;
 
 showToast(
-"⚡ "+this.data.specialName+" ⚡"
+"⚡ "+
+this.data.specialName+
+" ⚡"
 );
 
 }
 
 
-/* =====================================================
-   HIT CHECK
-===================================================== */
+/* HIT */
 
 checkHit(){
 
@@ -1045,31 +1616,26 @@ let damage=0;
 if(this.attackType==="punch")
 damage=8*this.power;
 
-
 if(this.attackType==="kick")
 damage=13*this.power;
-
 
 if(this.attackType==="heavy")
 damage=20*this.power;
 
-
 if(this.attackType==="air")
 damage=15*this.power;
 
-
 if(this.attackType==="special")
 damage=this.specialPower;
-
 
 if(this.attackType==="ultimate")
 damage=this.ultimatePower;
 
 
-/* combo bonus */
-
 if(this.combo>=2)
-damage*=1.05+this.combo*.015;
+damage*=
+1.05+
+this.combo*.015;
 
 
 target.takeDamage(
@@ -1084,6 +1650,7 @@ this.comboTimer=65;
 
 this.hitsLanded++;
 
+
 if(this.isPlayer){
 
 totalHits++;
@@ -1097,18 +1664,14 @@ this.combo
 }
 
 
-/* meter */
-
-this.meter+=
-this.attackType==="ultimate"
-?0
-:18;
+this.meter+=18;
 
 this.meter=
 Math.min(
 100,
 this.meter
 );
+
 
 if(this.meter>=100)
 this.ultimateReady=true;
@@ -1124,11 +1687,13 @@ this.attackType==="ultimate"
 
 if(this.attackType==="kick")
 sound("kick");
-else if(
+else
+if(
 this.attackType==="special"
 )
 sound("special");
-else if(
+else
+if(
 this.attackType==="ultimate"
 )
 sound("ultimate");
@@ -1149,11 +1714,12 @@ target===enemy
 }
 
 
-/* =====================================================
-   TAKE DAMAGE
-===================================================== */
+/* DAMAGE */
 
-takeDamage(amount,attacker){
+takeDamage(
+amount,
+attacker
+){
 
 if(this.invincible>0)
 return;
@@ -1161,29 +1727,27 @@ return;
 
 if(this.blocking){
 
-amount*=.18/this.defense;
-
-createBlockEffect(
-this.x+28,
-this.y+55
-);
+amount*=
+.18/
+this.defense;
 
 sound("block");
 
 }else{
 
-amount/=this.defense;
+amount/=
+this.defense;
 
 }
 
 
-/* training mode */
-
-if(mode==="training" &&
+if(
+mode==="training" &&
 this===enemy
 ){
 
-this.health=Math.max(
+this.health=
+Math.max(
 1,
 this.health-amount
 );
@@ -1207,29 +1771,14 @@ this.x+=
 attacker.facing*25;
 
 
-attacker.meter+=10;
-
-attacker.meter=
-Math.min(
-100,
-attacker.meter
-);
-
-if(attacker.meter>=100)
-attacker.ultimateReady=true;
-
-
 createHitEffect(
 this.x+28,
 this.y+55
 );
 
 
-/* launch */
-
 if(
-attacker.attackType==="heavy"||
-attacker.attackType==="upper"
+attacker.attackType==="heavy"
 ){
 
 this.velocityY=-8;
@@ -1239,9 +1788,7 @@ this.velocityY=-8;
 }
 
 
-/* =====================================================
-   DRAW
-===================================================== */
+/* DRAW */
 
 draw(){
 
@@ -1250,7 +1797,8 @@ ctx.save();
 
 /* shadow */
 
-ctx.fillStyle="rgba(0,0,0,.5)";
+ctx.fillStyle=
+"rgba(0,0,0,.5)";
 
 ctx.beginPath();
 
@@ -1291,40 +1839,21 @@ ctx.stroke();
 }
 
 
-/* body bounce */
+/* body */
 
 let bounce=
-this.walking&&this.y>=389
-?Math.sin(this.anim*4)*3
+this.walking &&
+this.y>=389
+?
+Math.sin(this.anim*4)*3
 :0;
 
-
-/* dash ghost */
-
-if(this.dashTimer>0){
-
-ctx.globalAlpha=.2;
-
-ctx.fillStyle=this.color;
-
-ctx.fillRect(
-this.x-this.facing*55,
-this.y+25,
-60,
-75
-);
-
-ctx.globalAlpha=1;
-
-}
-
-
-/* body */
 
 ctx.fillStyle=
 this.hitFlash>0
 ?"#fff"
 :this.color;
+
 
 ctx.fillRect(
 this.x+12,
@@ -1369,14 +1898,14 @@ ctx.fill();
 /* legs */
 
 ctx.fillStyle=
-this.hitFlash>0
-?"#fff"
-:this.color;
+this.color;
 
 let leg=
 this.walking
-?Math.sin(this.anim*5)*4
+?
+Math.sin(this.anim*5)*4
 :0;
+
 
 ctx.fillRect(
 this.x+12,
@@ -1399,26 +1928,35 @@ ctx.fillStyle="#ffd6a5";
 
 
 if(
-this.attackType==="punch"||
+this.attackType==="punch" ||
 this.attackType==="heavy"
 ){
 
 ctx.fillRect(
 this.x+
-(this.facing===1?38:-45),
+(
+this.facing===1
+?38
+:-45
+),
 this.y+42+bounce,
 55,
 14
 );
 
-}else if(
-this.attackType==="kick"||
+}else
+if(
+this.attackType==="kick" ||
 this.attackType==="air"
 ){
 
 ctx.fillRect(
 this.x+
-(this.facing===1?35:-60),
+(
+this.facing===1
+?35
+:-60
+),
 this.y+68+bounce,
 70,
 14
@@ -1450,6 +1988,7 @@ this.attackType==="special"
 ){
 
 ctx.strokeStyle=this.color;
+
 ctx.lineWidth=9;
 
 ctx.beginPath();
@@ -1474,6 +2013,7 @@ this.attackType==="ultimate"
 ){
 
 ctx.strokeStyle="#fff";
+
 ctx.lineWidth=13;
 
 ctx.beginPath();
@@ -1496,6 +2036,7 @@ ctx.stroke();
 if(this.blocking){
 
 ctx.strokeStyle="#74b9ff";
+
 ctx.lineWidth=7;
 
 ctx.beginPath();
@@ -1521,7 +2062,7 @@ ctx.restore();
 
 
 /* =====================================================
-   START MODES
+   START
 ===================================================== */
 
 function startArcade(){
@@ -1534,6 +2075,11 @@ playerWins=0;
 enemyWins=0;
 
 round=1;
+
+totalHits=0;
+maxCombo=0;
+
+menu.classList.add("hidden");
 
 startRound();
 
@@ -1549,13 +2095,18 @@ enemyWins=0;
 
 round=1;
 
+totalHits=0;
+maxCombo=0;
+
+menu.classList.add("hidden");
+
 startRound();
 
 }
 
 
 /* =====================================================
-   START ROUND
+   ROUND
 ===================================================== */
 
 function startRound(){
@@ -1571,7 +2122,8 @@ if(mode==="training"){
 
 enemyType="ryuji";
 
-}else if(arcadeStage>=4){
+}else
+if(arcadeStage>=4){
 
 enemyType="void";
 
@@ -1615,6 +2167,7 @@ false
 if(arcadeStage>=4){
 
 enemy.health=125;
+
 enemy.maxStamina=135;
 
 }
@@ -1635,25 +2188,21 @@ roundLock=false;
 
 paused=false;
 
-roundScreen.classList.remove("hidden");
-
-pauseScreen.classList.add("hidden");
-
-gameOver.classList.add("hidden");
+roundScreen.classList.remove(
+"hidden"
+);
 
 roundText.textContent=
 mode==="training"
 ?"🎯 TRAINING"
 :"ROUND "+round;
 
-roundSub.textContent=
-"READY?";
+roundSub.textContent="READY?";
 
 
 setTimeout(()=>{
 
-roundSub.textContent=
-"FIGHT!";
+roundSub.textContent="FIGHT!";
 
 sound("select");
 
@@ -1662,13 +2211,13 @@ sound("select");
 
 setTimeout(()=>{
 
-roundScreen.classList.add("hidden");
+roundScreen.classList.add(
+"hidden"
+);
 
 roundStarting=false;
 
 gameRunning=true;
-
-matchStartTime=Date.now();
 
 startTimer();
 
@@ -1683,12 +2232,17 @@ startTimer();
 
 function startTimer(){
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
 timerInterval=
 setInterval(()=>{
 
-if(!gameRunning||paused)
+if(
+!gameRunning ||
+paused
+)
 return;
 
 if(mode==="training")
@@ -1700,15 +2254,10 @@ if(timeLeft<=0){
 
 if(
 player.health>=enemy.health
-){
-
+)
 handleRoundEnd(true);
-
-}else{
-
+else
 handleRoundEnd(false);
-
-}
 
 }
 
@@ -1718,12 +2267,13 @@ handleRoundEnd(false);
 
 
 /* =====================================================
-   PLAYER CONTROL
+   CONTROLS
 ===================================================== */
 
 function playerControls(){
 
-if(!player)return;
+if(!player)
+return;
 
 
 if(keys["a"])
@@ -1734,12 +2284,10 @@ player.move(1);
 
 
 player.blocking=
-!!keys["l"]&&
-player.attackTimer===0&&
+!!keys["l"] &&
+player.attackTimer===0 &&
 player.dashTimer===0;
 
-
-/* air attack */
 
 if(
 keys["j"] &&
@@ -1760,10 +2308,13 @@ player.attack("air");
 
 function enemyAI(){
 
-if(!enemy)return;
+if(!enemy)
+return;
 
-const distance=
+
+let distance=
 player.x-enemy.x;
+
 
 enemy.facing=
 distance>=0
@@ -1780,19 +2331,18 @@ range=155;
 if(difficulty==="hard")
 range=105;
 
-
 if(arcadeStage>=4)
 range=95;
 
-
-/* movement */
 
 if(
 Math.abs(distance)>range
 ){
 
 enemy.move(
-distance>0?1:-1
+distance>0
+?1
+:-1
 );
 
 }
@@ -1829,29 +2379,26 @@ r<.28
 
 enemy.ultimate();
 
-}else if(
-r<.47
-){
+}else
+if(r<.47){
 
 enemy.attack("punch");
 
-}else if(
-r<.67
-){
+}else
+if(r<.67){
 
 enemy.attack("kick");
 
-}else if(
-r<.78
-&&
+}else
+if(
+r<.78 &&
 enemy.stamina>=40
 ){
 
 enemy.special();
 
-}else if(
-r<.88
-){
+}else
+if(r<.88){
 
 enemy.attack("heavy");
 
@@ -1875,27 +2422,6 @@ Math.random()*25;
 
 }
 
-
-/* hard reaction */
-
-if(
-difficulty==="hard" &&
-player.attackTimer>0 &&
-Math.abs(distance)<130 &&
-Math.random()<.07
-){
-
-enemy.blocking=true;
-
-setTimeout(()=>{
-
-if(enemy)
-enemy.blocking=false;
-
-},350);
-
-}
-
 }
 
 
@@ -1906,16 +2432,19 @@ enemy.blocking=false;
 function handleRoundEnd(playerWon){
 
 if(
-roundLock||
+roundLock ||
 mode==="training"
 )
 return;
+
 
 roundLock=true;
 
 gameRunning=false;
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
 
 if(playerWon)
@@ -1925,6 +2454,7 @@ enemyWins++;
 
 
 sound("ko");
+
 
 showToast(
 playerWon
@@ -1936,7 +2466,7 @@ playerWon
 setTimeout(()=>{
 
 if(
-playerWins>=2||
+playerWins>=2 ||
 enemyWins>=2
 ){
 
@@ -1958,29 +2488,6 @@ startRound();
 
 
 /* =====================================================
-   TRAINING RESET
-===================================================== */
-
-function trainingReset(){
-
-if(mode!=="training")
-return;
-
-enemy.health=100;
-enemy.x=660;
-
-player.health=100;
-player.x=170;
-
-player.meter=0;
-player.ultimateReady=false;
-
-showToast("🎯 RESET");
-
-}
-
-
-/* =====================================================
    MATCH END
 ===================================================== */
 
@@ -1988,12 +2495,17 @@ function finishMatch(won){
 
 gameRunning=false;
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
-gameOver.classList.remove("hidden");
+gameOver.classList.remove(
+"hidden"
+);
 
 
 let gainedXP=0;
+
 let gainedCoins=0;
 
 
@@ -2015,15 +2527,18 @@ maxCombo;
 if(arcadeStage>=4){
 
 gainedXP+=300;
+
 gainedCoins+=150;
 
 }
 
 
 save.wins++;
+
 save.streak++;
 
 save.xp+=gainedXP;
+
 save.coins+=gainedCoins;
 
 
@@ -2035,35 +2550,51 @@ enemyWins;
 
 
 statsText.innerHTML=
-"⭐ +"+gainedXP+
-" XP　🪙 +"+gainedCoins+
+"⭐ +"+
+gainedXP+
+" XP　🪙 +"+
+gainedCoins+
 " Coins<br>"+
-"🔥 Max Combo: "+maxCombo+
-"　👊 Hits: "+totalHits;
+"🔥 Max Combo: "+
+maxCombo+
+"　👊 Hits: "+
+totalHits;
 
 
 let achievements=[];
 
 
 if(maxCombo>=10)
-achievements.push("🔥 COMBO MASTER");
+achievements.push(
+"🔥 COMBO MASTER"
+);
 
 if(maxCombo>=20)
-achievements.push("👺 COMBO GOD");
+achievements.push(
+"👺 COMBO GOD"
+);
 
 if(totalHits>=20)
-achievements.push("👊 BRAWLER");
+achievements.push(
+"👊 BRAWLER"
+);
 
 if(save.streak>=5)
-achievements.push("🔥 WIN STREAK");
+achievements.push(
+"🔥 WIN STREAK"
+);
 
 if(arcadeStage>=4)
-achievements.push("👑 BOSS SLAYER");
+achievements.push(
+"👑 BOSS SLAYER"
+);
 
 
 achievementText.textContent=
 achievements.length
-?"🏅 "+achievements.join(" • ")
+?
+"🏅 "+
+achievements.join(" • ")
 :"";
 
 
@@ -2082,8 +2613,10 @@ playerWins+
 enemyWins;
 
 statsText.innerHTML=
-"Max Combo: "+maxCombo+
-"　Hits: "+totalHits;
+"Max Combo: "+
+maxCombo+
+"　Hits: "+
+totalHits;
 
 achievementText.textContent="";
 
@@ -2144,35 +2677,17 @@ particles.push({
 x:x,
 y:y,
 
-vx:(Math.random()-.5)*12,
-vy:(Math.random()-.5)*12,
+vx:
+(Math.random()-.5)*12,
+
+vy:
+(Math.random()-.5)*12,
 
 life:25,
+
 size:4,
+
 color:"#ffd32a"
-
-});
-
-}
-
-}
-
-
-function createBlockEffect(x,y){
-
-for(let i=0;i<14;i++){
-
-particles.push({
-
-x:x,
-y:y,
-
-vx:(Math.random()-.5)*9,
-vy:(Math.random()-.5)*9,
-
-life:20,
-size:5,
-color:"#74b9ff"
 
 });
 
@@ -2195,13 +2710,18 @@ particles.push({
 x:x,
 y:y,
 
-vx:(Math.random()-.5)*18,
-vy:(Math.random()-.5)*18,
+vx:
+(Math.random()-.5)*18,
 
-life:45+
+vy:
+(Math.random()-.5)*18,
+
+life:
+45+
 Math.random()*25,
 
-size:4+
+size:
+4+
 Math.random()*5,
 
 color:color
@@ -2213,25 +2733,12 @@ color:color
 }
 
 
-function createText(x,y,text){
-
-floatingTexts.push({
-
-x:x,
-y:y,
-text:text,
-life:45
-
-});
-
-}
-
-
 function updateParticles(){
 
 particles.forEach(p=>{
 
 p.x+=p.vx;
+
 p.y+=p.vy;
 
 p.vy+=.12;
@@ -2244,20 +2751,6 @@ p.life--;
 particles=
 particles.filter(
 p=>p.life>0
-);
-
-
-floatingTexts.forEach(t=>{
-
-t.y-=.7;
-t.life--;
-
-});
-
-
-floatingTexts=
-floatingTexts.filter(
-t=>t.life>0
 );
 
 }
@@ -2284,29 +2777,13 @@ p.size
 
 });
 
-
 ctx.globalAlpha=1;
-
-
-floatingTexts.forEach(t=>{
-
-ctx.fillStyle="#fff";
-
-ctx.font="bold 18px Arial";
-
-ctx.fillText(
-t.text,
-t.x,
-t.y
-);
-
-});
 
 }
 
 
 /* =====================================================
-   ARENAS
+   ARENA
 ===================================================== */
 
 function drawArena(){
@@ -2322,21 +2799,55 @@ ctx.createLinearGradient(
 
 if(selectedArena==="city"){
 
-g.addColorStop(0,"#10102b");
-g.addColorStop(.65,"#29294a");
-g.addColorStop(1,"#141414");
+g.addColorStop(
+0,
+"#10102b"
+);
 
-}else if(selectedArena==="dojo"){
+g.addColorStop(
+.65,
+"#29294a"
+);
 
-g.addColorStop(0,"#c9a66b");
-g.addColorStop(.6,"#704526");
-g.addColorStop(1,"#2d1a10");
+g.addColorStop(
+1,
+"#141414"
+);
+
+}else
+if(selectedArena==="dojo"){
+
+g.addColorStop(
+0,
+"#c9a66b"
+);
+
+g.addColorStop(
+.6,
+"#704526"
+);
+
+g.addColorStop(
+1,
+"#2d1a10"
+);
 
 }else{
 
-g.addColorStop(0,"#280707");
-g.addColorStop(.55,"#8a2413");
-g.addColorStop(1,"#160504");
+g.addColorStop(
+0,
+"#280707"
+);
+
+g.addColorStop(
+.55,
+"#8a2413"
+);
+
+g.addColorStop(
+1,
+"#160504"
+);
 
 }
 
@@ -2456,7 +2967,8 @@ ctx.fillRect(
 
 ctx.fillStyle="#5b2d1d";
 
-ctx.font="bold 55px Arial";
+ctx.font=
+"bold 55px Arial";
 
 ctx.fillText(
 "道場",
@@ -2483,9 +2995,15 @@ ctx.beginPath();
 
 ctx.moveTo(x,510);
 
-ctx.lineTo(x+35,290);
+ctx.lineTo(
+x+35,
+290
+);
 
-ctx.lineTo(x+70,510);
+ctx.lineTo(
+x+70,
+510
+);
 
 ctx.fill();
 
@@ -2499,37 +3017,14 @@ ctx.arc(
 450,
 260,
 80+
-Math.sin(Date.now()/300)*8,
+Math.sin(
+Date.now()/300
+)*8,
 0,
 Math.PI*2
 );
 
 ctx.fill();
-
-
-for(let i=0;i<12;i++){
-
-ctx.fillStyle="#ff6b00";
-
-ctx.globalAlpha=.5;
-
-ctx.beginPath();
-
-ctx.arc(
-Math.random()*900,
-250+
-Math.random()*200,
-2+
-Math.random()*3,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-}
-
-ctx.globalAlpha=1;
 
 }
 
@@ -2548,24 +3043,6 @@ ctx.fillRect(
 40
 );
 
-ctx.strokeStyle="#555";
-
-for(
-let x=0;
-x<900;
-x+=60
-){
-
-ctx.beginPath();
-
-ctx.moveTo(x,510);
-
-ctx.lineTo(x+30,550);
-
-ctx.stroke();
-
-}
-
 }
 
 
@@ -2579,7 +3056,7 @@ if(!player||!enemy)
 return;
 
 
-/* player health */
+/* health */
 
 ctx.fillStyle="#222";
 
@@ -2600,8 +3077,6 @@ ctx.fillRect(
 30
 );
 
-
-/* enemy */
 
 ctx.fillStyle="#222";
 
@@ -2640,7 +3115,10 @@ ctx.fillRect(
 25,
 57,
 200*
-(player.stamina/player.maxStamina),
+(
+player.stamina/
+player.maxStamina
+),
 9
 );
 
@@ -2667,33 +3145,12 @@ ctx.fillRect(
 );
 
 
-/* enemy meter */
-
-ctx.fillStyle="#222";
-
-ctx.fillRect(
-675,
-57,
-200,
-9
-);
-
-ctx.fillStyle="#ffd32a";
-
-ctx.fillRect(
-675,
-57,
-200*
-(enemy.meter/100),
-10
-);
-
-
 /* names */
 
 ctx.fillStyle="#fff";
 
-ctx.font="bold 17px Arial";
+ctx.font=
+"bold 17px Arial";
 
 ctx.fillText(
 player.name,
@@ -2710,7 +3167,8 @@ enemy.name,
 
 /* timer */
 
-ctx.font="bold 32px Arial";
+ctx.font=
+"bold 32px Arial";
 
 ctx.fillText(
 mode==="training"
@@ -2744,7 +3202,8 @@ if(player.combo>1){
 
 ctx.fillStyle="#ffd32a";
 
-ctx.font="bold 27px Arial";
+ctx.font=
+"bold 27px Arial";
 
 ctx.fillText(
 player.combo+
@@ -2762,31 +3221,13 @@ if(player.ultimateReady){
 
 ctx.fillStyle="#fff";
 
-ctx.font="bold 15px Arial";
+ctx.font=
+"bold 15px Arial";
 
 ctx.fillText(
-"⚡ ULTIMATE READY — Q",
-330,
+"⚡ ULTIMATE READY",
+350,
 140
-);
-
-}
-
-
-/* arcade stage */
-
-if(mode==="arcade"){
-
-ctx.fillStyle="#fff";
-
-ctx.font="bold 14px Arial";
-
-ctx.fillText(
-arcadeStage>=4
-?"👑 BOSS"
-:"STAGE "+arcadeStage,
-420,
-170
 );
 
 }
@@ -2821,7 +3262,9 @@ window.addEventListener(
 "keydown",
 e=>{
 
-let key=e.key.toLowerCase();
+let key=
+e.key.toLowerCase();
+
 
 if(
 [
@@ -2849,9 +3292,9 @@ keys[key]=true;
 
 
 if(
-!gameRunning||
-roundStarting||
-paused||
+!gameRunning ||
+roundStarting ||
+paused ||
 hitStop>0
 )
 return;
@@ -2889,21 +3332,15 @@ e.key.toLowerCase()
 });
 
 
-window.addEventListener(
-"blur",
-()=>{
-
-keys={};
-
-});
-
-
 /* =====================================================
-   TOUCH
+   MOBILE TOUCH
 ===================================================== */
 
-document.querySelectorAll(".touchBtn")
+document.querySelectorAll(
+".touchBtn"
+)
 .forEach(button=>{
+
 
 button.addEventListener(
 "pointerdown",
@@ -2911,17 +3348,31 @@ e=>{
 
 e.preventDefault();
 
+button.setPointerCapture(
+e.pointerId
+);
+
+
 let key=
 button.dataset.key;
 
 let action=
 button.dataset.action;
 
-if(key)
+
+if(key){
+
 keys[key]=true;
 
-if(!gameRunning||paused)
+}
+
+
+if(
+!gameRunning ||
+paused
+)
 return;
+
 
 if(action==="jump")
 player.jump();
@@ -2946,7 +3397,9 @@ player.blocking=true;
 
 button.addEventListener(
 "pointerup",
-()=>{
+e=>{
+
+e.preventDefault();
 
 let key=
 button.dataset.key;
@@ -2954,8 +3407,10 @@ button.dataset.key;
 let action=
 button.dataset.action;
 
+
 if(key)
 keys[key]=false;
+
 
 if(action==="block")
 player.blocking=false;
@@ -2965,7 +3420,7 @@ player.blocking=false;
 
 button.addEventListener(
 "pointercancel",
-()=>{
+e=>{
 
 let key=
 button.dataset.key;
@@ -2973,7 +3428,9 @@ button.dataset.key;
 if(key)
 keys[key]=false;
 
-if(button.dataset.action==="block")
+if(
+button.dataset.action==="block"
+)
 player.blocking=false;
 
 });
@@ -2985,19 +3442,27 @@ player.blocking=false;
    CHARACTER SELECT
 ===================================================== */
 
-document.querySelectorAll(".card")
+document.querySelectorAll(
+".card"
+)
 .forEach(card=>{
 
 card.addEventListener(
 "click",
 ()=>{
 
-document.querySelectorAll(".card")
+document.querySelectorAll(
+".card"
+)
 .forEach(c=>
-c.classList.remove("selected")
+c.classList.remove(
+"selected"
+)
 );
 
-card.classList.add("selected");
+card.classList.add(
+"selected"
+);
 
 selectedFighter=
 card.dataset.fighter;
@@ -3026,15 +3491,17 @@ document.querySelectorAll(
 ".arenaButtons button"
 )
 .forEach(b=>
-b.classList.remove("selected")
+b.classList.remove(
+"selected"
+)
 );
 
-button.classList.add("selected");
+button.classList.add(
+"selected"
+);
 
 selectedArena=
 button.dataset.arena;
-
-sound("select");
 
 });
 
@@ -3082,11 +3549,17 @@ document.getElementById(
 
 gameRunning=false;
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
-pauseScreen.classList.add("hidden");
+pauseScreen.classList.add(
+"hidden"
+);
 
-menu.classList.remove("hidden");
+menu.classList.remove(
+"hidden"
+);
 
 };
 
@@ -3094,8 +3567,6 @@ menu.classList.remove("hidden");
 document.getElementById(
 "rematchBtn"
 ).onclick=()=>{
-
-sound("select");
 
 if(mode==="training")
 startTraining();
@@ -3111,109 +3582,21 @@ document.getElementById(
 
 gameRunning=false;
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
-gameOver.classList.add("hidden");
+gameOver.classList.add(
+"hidden"
+);
 
-menu.classList.remove("hidden");
+menu.classList.remove(
+"hidden"
+);
 
 updateSaveInfo();
 
 };
-
-
-/* =====================================================
-   CONTROLLER
-===================================================== */
-
-function controllerLoop(){
-
-const pads=
-navigator.getGamepads
-?navigator.getGamepads()
-:[];
-
-const pad=pads[0];
-
-
-if(
-pad&&
-gameRunning&&
-player&&
-!paused
-){
-
-let x=pad.axes[0];
-
-
-keys["a"]=
-x<-.4;
-
-keys["d"]=
-x>.4;
-
-
-if(
-pad.buttons[0] &&
-pad.buttons[0].pressed
-){
-
-player.attack("punch");
-
-}
-
-
-if(
-pad.buttons[1] &&
-pad.buttons[1].pressed
-){
-
-player.attack("kick");
-
-}
-
-
-if(
-pad.buttons[2] &&
-pad.buttons[2].pressed
-){
-
-player.jump();
-
-}
-
-
-if(
-pad.buttons[3] &&
-pad.buttons[3].pressed
-){
-
-player.special();
-
-}
-
-
-if(
-pad.buttons[4] &&
-pad.buttons[4].pressed
-){
-
-player.blocking=true;
-
-}else{
-
-player.blocking=false;
-
-}
-
-}
-
-
-requestAnimationFrame(
-controllerLoop
-);
-
-}
 
 
 /* =====================================================
@@ -3261,7 +3644,10 @@ shake--;
 drawArena();
 
 
-if(gameRunning&&!paused){
+if(
+gameRunning &&
+!paused
+){
 
 playerControls();
 
@@ -3299,13 +3685,9 @@ gameLoop
 }
 
 
-/* =====================================================
-   START
-===================================================== */
+/* START */
 
 gameLoop();
-
-controllerLoop();
 
 </script>
 
